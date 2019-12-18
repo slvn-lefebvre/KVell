@@ -113,7 +113,7 @@ static size_t submit_slab_buffer(struct slab_context *ctx, int buffer_idx) {
 static uint64_t get_hash_for_item(char *item) {
    struct item_metadata *meta = (struct item_metadata *)item;
    char *item_key = &item[sizeof(*meta)];
-   return *(uint64_t*)item_key;
+   return *(uint64_t*)item_key; // No hashing ?
 }
 
 /* Requests are statically attributed to workers using this function */
@@ -133,7 +133,8 @@ static struct slab *get_slab(struct slab_context *ctx, void *item) {
       if(item_size <= slab_sizes[i])
          return ctx->slabs[i];
    }
-   die("Item is too big\n");
+   struct item_metadata * meta = (struct item_metadata*) item;
+   die("Item is too big %zu, %zu\n", meta->key_size, meta->value_size);
 }
 
 struct slab *get_item_slab(int worker_id, void *item) {
@@ -145,9 +146,10 @@ static void enqueue_slab_callback(struct slab_context *ctx, enum slab_action act
    size_t buffer_idx = get_slab_buffer(ctx);
    callback->action = action;
    ctx->callbacks[buffer_idx] = callback;
-   add_time_in_payload(callback, 0);
+   //commented the add_time because it prevents using paylaod for other purposes
+   //add_time_in_payload(callback, 0);
    submit_slab_buffer(ctx, buffer_idx);
-   add_time_in_payload(callback, 1);
+   //add_time_in_payload(callback, 1);
 }
 
 /*
@@ -215,7 +217,7 @@ again:
    for(size_t i = 0; i < pending; i++) {
       struct slab_callback *callback = ctx->callbacks[ctx->processed_callbacks%ctx->max_pending_callbacks];
       enum slab_action action = callback->action;
-      add_time_in_payload(callback, 2);
+      //add_time_in_payload(callback, 2);
 
       index_entry_t *e = NULL;
       if(action != READ_NO_LOOKUP)

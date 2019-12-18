@@ -10,11 +10,21 @@
 #define memory_index_delete rbtree_worker_delete
 #define memory_index_scan rbtree_init_scan
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void rbtree_init(void);
 struct index_entry *rbtree_worker_lookup(int worker_id, void *item);
 void rbtree_worker_delete(int worker_id, void *item);
 struct index_scan rbtree_init_scan(void *item, size_t scan_size);
 void rbtree_index_add(struct slab_callback *cb, void *item);
 
+#ifdef __cplusplus
+}
+#endif
+
+  
 #endif
 

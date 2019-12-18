@@ -124,7 +124,7 @@ static void worker_do_io(struct io_context *ctx) {
                                        //        complete ios
                                        //        (old value written to disk)
 
-      add_time_in_payload(callback, 3);
+      //add_time_in_payload(callback, 3); // commented out because no need to use for bench
    }
 
    // Submit requests to the kernel

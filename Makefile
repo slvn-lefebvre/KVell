@@ -12,6 +12,7 @@ MAIN_OBJ=main.o slab.o freelist.o ioengine.o pagecache.o stats.o random.o slabwo
 MICROBENCH_OBJ=microbench.o random.o stats.o utils.o ${INDEXES_OBJ}
 BENCH_OBJ=benchcomponents.o pagecache.o random.o $(INDEXES_OBJ)
 
+LIB_OBJ=slab.o freelist.o ioengine.o pagecache.o stats.o random.o slabworker.o utils.o in-memory-index-rbtree.o in-memory-index-rax.o in-memory-index-art.o in-memory-index-btree.o ${INDEXES_OBJ}
 
 .PHONY: all clean
 
@@ -31,6 +32,14 @@ microbench: $(MICROBENCH_OBJ)
 
 benchcomponents: $(BENCH_OBJ)
 
+
+#lib: LDFLAGS= -shared -v
+lib: CFLAGS =-O2 -ggdb3 -Wall -fPIC
+
+lib: libkvell.so
+libkvell.so: $(LIB_OBJ)
+	$(CC) -shared -o $@  $^ $(LDLIBS)
+
 clean:
-	rm -f *.o indexes/*.o main microbench benchcomponents
+	rm -f *.o indexes/*.o main microbench benchcomponents libkvell.so
 

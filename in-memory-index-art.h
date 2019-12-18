@@ -10,11 +10,22 @@
 #define memory_index_delete art_worker_delete
 #define memory_index_scan art_init_scan
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void art_init(void);
 struct index_entry *art_worker_lookup(int worker_id, void *item);
 void art_worker_delete(int worker_id, void *item);
 struct index_scan art_init_scan(void *item, size_t scan_size);
 void art_index_add(struct slab_callback *cb, void *item);
 
+#ifdef __cplusplus
+}
+#endif
+
+
+  
 #endif
 
