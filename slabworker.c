@@ -113,7 +113,7 @@ static size_t submit_slab_buffer(struct slab_context *ctx, int buffer_idx) {
 static uint64_t get_hash_for_item(char *item) {
    struct item_metadata *meta = (struct item_metadata *)item;
    char *item_key = &item[sizeof(*meta)];
-   return *(uint64_t*)item_key;
+   return *(uint64_t*)item_key; // No hashing ?
 }
 
 /* Requests are statically attributed to workers using this function */
@@ -145,9 +145,9 @@ static void enqueue_slab_callback(struct slab_context *ctx, enum slab_action act
    size_t buffer_idx = get_slab_buffer(ctx);
    callback->action = action;
    ctx->callbacks[buffer_idx] = callback;
-   add_time_in_payload(callback, 0);
+   //add_time_in_payload(callback, 0);
    submit_slab_buffer(ctx, buffer_idx);
-   add_time_in_payload(callback, 1);
+   //add_time_in_payload(callback, 1);
 }
 
 /*
@@ -379,7 +379,7 @@ static void *worker_slab_init(void *pdata) {
    return NULL;
 }
 
-void slab_workers_init(int _nb_disks, int nb_workers_per_disk) {
+void slab_workers_init(int _nb_disks, int nb_workers_per_disk) { // TODO can this fail ? Return an error ?
    size_t max_pending_callbacks = MAX_NB_PENDING_CALLBACKS_PER_WORKER;
    nb_disks = _nb_disks;
    nb_workers = nb_disks * nb_workers_per_disk;

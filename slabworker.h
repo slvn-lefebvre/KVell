@@ -13,8 +13,8 @@ void kv_add_or_update_async(struct slab_callback *callback);
 void kv_remove_async(struct slab_callback *callback);
 
 typedef struct index_scan tree_scan_res_t;
-tree_scan_res_t kv_init_scan(void *item, size_t scan_size);
-void kv_read_async_no_lookup(struct slab_callback *callback, struct slab *s, size_t slab_idx);
+extern tree_scan_res_t kv_init_scan(void *item, size_t scan_size);
+extern void kv_read_async_no_lookup(struct slab_callback *callback, struct slab *s, size_t slab_idx);
 
 size_t get_database_size(void);
 

@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
    /* Recover database */
    start_timer {
-      slab_workers_init(nb_disks, nb_workers_per_disk);
+
    } stop_timer("Init found %lu elements", get_database_size());
 
    /* Add missing items if any */
